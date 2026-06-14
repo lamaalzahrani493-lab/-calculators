@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧮 آلة حاسبة متقدمة شاملة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f1f5f9;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* ============ الرأس ============ */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #38bdf8, #a855f7, #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============ شريط التبويبات ============ */
+        .tabs-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: rgba(56, 189, 248, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: #38bdf8;
+            color: white;
+            border-color: #38bdf8;
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        /* ============ محتوى التبويبات ============ */
+        .tab-content {
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============ الآلة الحاسبة العادية ============ */
+        .calculator-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .calculator-panel {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .display {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: right;
+            direction: ltr;
+        }
+
+        .display-output {
+            font-size: 2rem;
+            color: #38bdf8;
+            word-wrap: break-word;
+            word-break: break-all;
+            min-height: 3rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            font-weight: 600;
+        }
+
+        .display-input {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            min-height: 1.5rem;
+        }
+
+        /* ============ شبكة الأزرار ============ */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(56, 189, 248, 0.05));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-operator {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.1));
+            border-color: rgba(168, 85, 247, 0.3);
+            color: #a855f7;
+        }
+
+        .btn-operator:hover {
+            background: rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-equal {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #10b981;
+            color: white;
+            grid-column: span 2;
+            font-size: 1.3rem;
+        }
+
+        .btn-equal:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(244, 63, 94, 0.1));
+            border-color: rgba(244, 63, 94, 0.3);
+            color: #f43f5e;
+        }
+
+        .btn-delete:hover {
+            background: rgba(244, 63, 94, 0.3);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.2));
+            border-color: rgba(244, 63, 94, 0.4);
+            color: #fca5ac;
+            grid-column: span 2;
+        }
+
+        .btn-clear:hover {
+            background: rgba(244, 63, 94, 0.4);
+        }
+
+        /* ============ الأزرار الإضافية ============ */
+        .extra-functions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .fn-btn {
+            padding: 0.9rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            color: #3b82f6;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .fn-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ============ قسم المصفوفات ============ */
+        .matrix-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .matrix-input-section {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .matrix-input-section h3 {
+            color: #38bdf8;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .size-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .size-input {
+            flex: 1;
+            padding: 0.8rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            color: #e2e8f0;
+            text-align: center;
+        }
+
+        .matrix-preset-btns {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .preset-btn {
+            padding: 0.7rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            color: #a855f7;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .preset-btn:hover {
+            background: rgba(168, 85, 247, 0.3);
+        }
+
+        .preset-btn.active {
+            background: #a855f7;
+            color: white;
+        }
+
+        .matrix-grid-container {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .matrix-grid {
+            display: inline-grid;
+            gap: 0.6rem;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 15px;
+        }
+
+        .matrix-input-field {
+            width: 70px;
+            height: 70px;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px;
+            color: #38bdf8;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .matrix-input-field:focus {
+            outline: none;
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+        }
+
+        .matrix-operations {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .matrix-op-btn {
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            color: #10b981;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .matrix-op-btn:hover {
+            background: rgba(16, 185, 129, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ============ نتائج المصفوفات ============ */
+        .matrix-results {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .matrix-results h3 {
+            color: #10b981;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .result-item {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid #10b981;
+            border-radius: 10px;
+        }
+
+        .result-title {
+            color: #10b981;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .matrix-display {
+            display: inline-grid;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .matrix-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .matrix-cell {
+            min-width: 60px;
+            padding: 0.8rem;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        /* ============ التنبيهات ============ */
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert.error {
+            background: rgba(244, 63, 94, 0.15);
+            border-left: 4px solid #f43f5e;
+            color: #fca5ac;
+        }
+
+        .alert.success {
+            background: rgba(16, 185, 129, 0.15);
+            border-left: 4px solid #10b981;
+            color: #6ee7b7;
+        }
+
+        .alert.info {
+            background: rgba(56, 189, 248, 0.15);
+            border-left: 4px solid #38bdf8;
+            color: #7dd3fc;
+        }
+
+        /* ============ السجل ============ */
+        .history-section {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-section h3 {
+            color: #f43f5e;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .history-item {
+            padding: 0.8rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 3px solid #f43f5e;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            transform: translateX(-5px);
+        }
+
+        .history-item-text {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .history-item-time {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.3rem;
+        }
+
+        /* ============ التجاوب ============ */
+        @media (max-width: 1024px) {
+            .calculator-wrapper,
+            .matrix-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .buttons-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .matrix-preset-btns {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .matrix-input-field {
+                width: 60px;
+                height: 60px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ============ الشريط العلوي ============ */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .theme-toggle {
+            padding: 0.8rem 1.5rem;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            color: #a855f7;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(168, 85, 247, 0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- الرأس -->
+        <div class="header">
+            <h1>🧮 آلة حاسبة متقدمة شاملة</h1>
+            <p>حاسبة علمية + حاسبة مصفوفات + سجل متقدم</p>
+        </div>
+
+        <!-- الشريط العلوي -->
+        <div class="top-bar">
+            <div>
+                <span style="color: #cbd5e1; margin-right: 1rem;">الإصدار 2.0</span>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 المظهر</button>
+        </div>
+
+        <!-- شريط التبويبات -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('calculator')">🧮 الآلة الحاسبة</button>
+            <button class="tab-btn" onclick="switchTab('scientific')">🔬 العمليات العلمية</button>
+            <button class="tab-btn" onclick="switchTab('matrix')">📊 المصفوفات</button>
+            <button class="tab-btn" onclick="switchTab('history')">📜 السجل</button>
+        </div>
+
+        <!-- ============ تبويب الآلة الحاسبة ============ -->
+        <div id="calculator" class="tab-content active">
+            <div class="calculator-wrapper">
+                <!-- الآلة الحاسبة -->
+                <div>
+                    <div class="calculator-panel">
+                        <div class="display">
+                            <div class="display-input" id="display-input"></div>
+                            <div class="display-output" id="display-output">0</div>
+                        </div>
+
+                        <div class="buttons-grid">
+                            <!-- الصف الأول -->
+                            <button class="btn btn-clear" onclick="clearDisplay()">AC</button>
+                            <button class="btn btn-delete" onclick="deleteLast()">⌫</button>
+                            <button class="btn btn-operator" onclick="appendOperator('/')">÷</button>
+
+                            <!-- الصف الثاني -->
+                            <button class="btn" onclick="appendNumber('7')">7</button>
+                            <button class="btn" onclick="appendNumber('8')">8</button>
+                            <button class="btn" onclick="appendNumber('9')">9</button>
+                            <button class="btn btn-operator" onclick="appendOperator('*')">×</button>
+
+                            <!-- الصف الثالث -->
+                            <button class="btn" onclick="appendNumber('4')">4</button>
+                            <button class="btn" onclick="appendNumber('5')">5</button>
+                            <button class="btn" onclick="appendNumber('6')">6</button>
+                            <button class="btn btn-operator" onclick="appendOperator('-')">−</button>
+
+                            <!-- الصف الرابع -->
+                            <button class="btn" onclick="appendNumber('1')">1</button>
+                            <button class="btn" onclick="appendNumber('2')">2</button>
+                            <button class="btn" onclick="appendNumber('3')">3</button>
+                            <button class="btn btn-operator" onclick="appendOperator('+')">+</button>
+
+                            <!-- الصف الخامس -->
+                            <button class="btn" onclick="appendNumber('0')">0</button>
+                            <button class="btn" onclick="appendNumber('.')">.</button>
+                            <button class="btn" onclick="toggleSign()">±</button>
+                            <button class="btn" onclick="calculatePercentage()">%</button>
+
+                            <!-- الصف السادس -->
+                            <button class="btn btn-equal" onclick="calculate()">=</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- العمليات الإضافية -->
+                <div>
+                    <div class="calculator-panel">
+                        <h3 style="color: #38bdf8; margin-bottom: 1.5rem; font-size: 1.3rem;">⚡ عمليات إضافية</h3>
+                        
+                        <div class="extra-functions">
+                            <button class="fn-btn" onclick="appendOperation('sqrt')">√</button>
+                            <button class="fn-btn" onclick="appendOperation('pow2')">x²</button>
+                            <button class="fn-btn" onclick="appendOperation('pow3')">x³</button>
+                            <button class="fn-btn" onclick="appendOperation('factorial')">n!</button>
+                            <button class="fn-btn" onclick="appendOperation('reciprocal')">1/x</button>
+                            <button class="fn-btn" onclick="appendOperation('abs')">|x|</button>
+                            <button class="fn-btn" onclick="appendOperation('log')">log</button>
+                            <button class="fn-btn" onclick="appendOperation('ln')">ln</button>
+                            <button class="fn-btn" onclick="appendOperation('exp')">eˣ</button>
+                            <button class="fn-btn" onclick="insertConstant('pi')">π</button>
+                            <button class="fn-btn" onclick="insertConstant('e')">e</button>
+                            <button class="fn-btn" onclick="insertConstant('phi')">φ</button>
+                        </div>
+
+                        <h3 style="color: #a855f7; margin-top: 2rem; margin-bottom: 1.5rem; font-size: 1.3rem;">📊 حول</h3>
+                        
+                        <div class="extra-functions">
+                            <button class="fn-btn" onclick="convertToHex()">Dec→Hex</button>
+                            <button class="fn-btn" onclick="convertToBinary()">Dec→Bin</button>
+                            <button class="fn-btn" onclick="convertToOctal()">Dec→Oct</button>
+                            <button class="fn-btn" onclick="copyToClipboard()">📋 نسخ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ تبويب العمليات العلمية ============ -->
+        <div id="scientific" class="tab-content">
+            <div class="calculator-wrapper">
+                <div>
+                    <div class="calculator-panel">
+                        <h3 style="color: #38bdf8; margin-bottom: 1.5rem; font-size: 1.3rem;">🔢 الدوال المثلثية</h3>
+                        
+                        <div class="extra-functions">
+                            <button class="fn-btn" onclick="appendOperation('sin')">sin</button>
+                            <button class="fn-btn" onclick="appendOperation('cos')">cos</button>
+                            <button class="fn-btn" onclick="appendOperation('tan')">tan</button>
+                            <button class="fn-btn" onclick="appendOperation('asin')">sin⁻¹</button>
+                            <button class="fn-btn" onclick="appendOperation('acos')">cos⁻¹</button>
+                            <button class="fn-btn" onclick="appendOperation('atan')">tan⁻¹</button>
+                            <button class="fn-btn" onclick="appendOperation('sinh')">sinh</button>
+                            <button class="fn-btn" onclick="appendOperation('cosh')">cosh</button>
+                            <button class="fn-btn" onclick="appendOperation('tanh')">tanh</button>
+                        </div>
+
+                        <h3 style="color: #a855f7; margin-top: 2rem; margin-bottom: 1.5rem; font-size: 1.3rem;">🔢 الدوال الحسابية</h3>
+                        
+                        <div class="extra-functions">
+                            <button class="fn-btn" onclick="appendOperation('cbrt')">∛</button>
+                            <button class="fn-btn" onclick="appendOperation('gcd')">GCD</button>
+                            <button class="fn-btn" onclick="appendOperation('lcm')">LCM</button>
+                            <button class="fn-btn" onclick="appendOperation('permutation')">P(n,r)</button>
+                            <button class="fn-btn" onclick="appendOperation('combination')">C(n,r)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="calculator-panel">
+                        <div class="display">
+                            <div class="display-input" id="scientific-input"></div>
+                            <div class="display-output" id="scientific-output">0</div>
+                        </div>
+
+                        <button class="fn-btn" style="width: 100%; padding: 1rem; font-size: 1rem; margin-bottom: 1rem;" onclick="calculateScientific()">
+                            ✓ احسب
+                        </button>
+
+                        <div id="scientific-info" style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 10px; color: #cbd5e1; font-size: 0.9rem;">
+                            <p>💡 أمثلة:</p>
+                            <ul style="margin-top: 0.5rem; margin-right: 1.5rem;">
+                                <li>sin(90) → 1</li>
+                                <li>sqrt(16) → 4</li>
+                                <li>log(100) → 2</li>
+                                <li>2^10 → 1024</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ تبويب المصفوفات ============ -->
+        <div id="matrix" class="tab-content">
+            <div class="matrix-main">
+                <!-- إدخال المصفوفة -->
+                <div>
+                    <div class="matrix-input-section">
+                        <h3>📥 إدخال المصفوفة</h3>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="color: #cbd5e1; display: block; margin-bottom: 0.5rem;">الحجم</label>
+                            <div class="size-selector">
+                                <input type="number" id="matrix-rows" class="size-input" value="2" min="1" max="10" onchange="updateMatrixGrid()" placeholder="الصفوف">
+                                <input type="number" id="matrix-cols" class="size-input" value="2" min="1" max="10" onchange="updateMatrixGrid()" placeholder="الأعمدة">
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="color: #cbd5e1; display: block; margin-bottom: 0.5rem;">أحجام معيارية</label>
+                            <div class="matrix-preset-btns">
+                                <button class="preset-btn active" onclick="setMatrixSize(2, 2)">2×2</button>
+                                <button class="preset-btn" onclick="setMatrixSize(3, 3)">3×3</button>
+                                <button class="preset-btn" onclick="setMatrixSize(4, 4)">4×4</button>
+                                <button class="preset-btn" onclick="setMatrixSize(2, 3)">2×3</button>
+                            </div>
+                        </div>
+
+                        <div class="matrix-grid-container">
+                            <div class="matrix-grid" id="matrix-grid"></div>
+                        </div>
+
+                        <div class="matrix-operations">
+                            <button class="matrix-op-btn" onclick="matrixDeterminant()">🔍 المحدد</button>
+                            <button class="matrix-op-btn" onclick="matrixTrace()">📍 الأثر</button>
+                            <button class="matrix-op-btn" onclick="matrixTranspose()">↔️ المدور</button>
+                            <button class="matrix-op-btn" onclick="matrixInverse()">🔄 العكس</button>
+                            <button class="matrix-op-btn" onclick="matrixRank()">📊 الرتبة</button>
+                            <button class="matrix-op-btn" onclick="matrixRowEchelon()">⬇️ الشكل المختزل</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- نتائج المصفوفات -->
+                <div>
+                    <div class="matrix-results">
+                        <h3>✨ النتائج</h3>
+                        <div id="matrix-results-container">
+                            <div class="alert info">
+                                <span>ℹ️</span>
+                                <span>أدخل المصفوفة واختر العملية</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ تبويب السجل ============ -->
+        <div id="history" class="tab-content">
+            <div class="history-section">
+                <h3>📜 سجل العمليات</h3>
+                <div id="history-container">
+                    <p style="color: #64748b; text-align: center;">لا توجد عمليات بعد</p>
+                </div>
+                <button class="fn-btn" style="width: 100%; margin-top: 1rem; padding: 0.8rem;" onclick="clearHistory()">
+                    🗑️ مسح السجل
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ JavaScript ============ -->
+    <script>
+        // ==================== المتغيرات العامة ====================
+        let display = '0';
+        let currentInput = '';
+        let history = [];
+        let currentMatrix = null;
+        let matrixRows = 2;
+        let matrixCols = 2;
+
+        // ==================== تحميل السجل من LocalStorage ====================
+        window.addEventListener('load', () => {
+            const savedHistory = localStorage.getItem('calculatorHistory');
+            if (savedHistory) {
+                history = JSON.parse(savedHistory);
+                updateHistoryDisplay();
+            }
+            updateMatrixGrid();
+        });
+
+        // ==================== تبديل التبويبات ====================
+        function switchTab(tabName) {
+            // إخفاء جميع التبويبات
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // إزالة الفئة active من جميع الأزرار
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // عرض التبويب المختار
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ==================== الدوال الأساسية للآلة الحاسبة ====================
+
+        function appendNumber(num) {
+            if (display === '0' && num !== '.') {
+                display = num.toString();
+            } else if (num === '.' && display.includes('.')) {
+                return;
+            } else {
+                display += num.toString();
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (display !== '' && !display.endsWith(op) && !display.endsWith('+') && !display.endsWith('-') && !display.endsWith('*') && !display.endsWith('/')) {
+                display += op;
+                updateDisplay();
+            }
+        }
+
+        function calculate() {
+            try {
+                const result = eval(display.replace('÷', '/').replace('×', '*').replace('−', '-'));
+                const calculation = `${display} = ${result}`;
+                
+                display = result.toString();
+                updateDisplay();
+                
+                // إضافة إلى السجل
+                addToHistory(calculation);
+                
+            } catch (error) {
+                showAlert('خطأ في الحساب', 'error');
+            }
+        }
+
+        function clearDisplay() {
+            display = '0';
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (display !== '0') {
+                display = display.slice(0, -1) || '0';
+                updateDisplay();
+            }
+        }
+
+        function toggleSign() {
+            if (display !== '0') {
+                display = (parseFloat(display) * -1).toString();
+                updateDisplay();
+            }
+        }
+
+        function calculatePercentage() {
+            try {
+                display = (parseFloat(display) / 100).toString();
+                updateDisplay();
+            } catch (error) {
+                showAlert('خطأ في حساب النسبة', 'error');
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('display-output').textContent = display;
+            document.getElementById('display-input').textContent = display;
+        }
+
+        // ==================== العمليات الإضافية ====================
+
+        function appendOperation(op) {
+            try {
+                const value = parseFloat(display);
+                let result;
+
+                switch(op) {
+                    case 'sqrt':
+                        result = Math.sqrt(value);
+                        break;
+                    case 'pow2':
+                        result = value * value;
+                        break;
+                    case 'pow3':
+                        result = value * value * value;
+                        break;
+                    case 'factorial':
+                        result = factorial(Math.round(value));
+                        break;
+                    case 'reciprocal':
+                        result = 1 / value;
+                        break;
+                    case 'abs':
+                        result = Math.abs(value);
+                        break;
+                    case 'log':
+                        result = Math.log10(value);
+                        break;
+                    case 'ln':
+                        result = Math.log(value);
+                        break;
+                    case 'exp':
+                        result = Math.exp(value);
+                        break;
+                    case 'sin':
+                        result = Math.sin(value * Math.PI / 180);
+                        break;
+                    case 'cos':
+                        result = Math.cos(value * Math.PI / 180);
+                        break;
+                    case 'tan':
+                        result = Math.tan(value * Math.PI / 180);
+                        break;
+                    case 'asin':
+                        result = Math.asin(value) * 180 / Math.PI;
+                        break;
+                    case 'acos':
+                        result = Math.acos(value) * 180 / Math.PI;
+                        break;
+                    case 'atan':
+                        result = Math.atan(value) * 180 / Math.PI;
+                        break;
+                    case 'sinh':
+                        result = Math.sinh(value);
+                        break;
+                    case 'cosh':
+                        result = Math.cosh(value);
+                        break;
+                    case 'tanh':
+                        result = Math.tanh(value);
+                        break;
+                    case 'cbrt':
+                        result = Math.cbrt(value);
+                        break;
+                    default:
+                        return;
+                }
+
+                const calculation = `${op}(${value}) = ${result}`;
+                display = result.toFixed(6);
+                updateDisplay();
+                addToHistory(calculation);
+                
+            } catch (error) {
+                showAlert('خطأ في العملية: ' + error.message, 'error');
+            }
+        }
+
+        function insertConstant(constant) {
+            let value;
+            switch(constant) {
+                case 'pi':
+                    value = Math.PI.toString();
+                    break;
+                case 'e':
+                    value = Math.E.toString();
+                    break;
+                case 'phi':
+                    value = ((1 + Math.sqrt(5)) / 2).toString();
+                    break;
+            }
+            display = value;
+            updateDisplay();
+        }
+
+        function factorial(n) {
+            if (n < 0) throw new Error('الرقم يجب أن يكون موجباً');
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // ==================== التحويلات ====================
+
+        function convertToHex() {
+            try {
+                const decimal = parseInt(display);
+                const hex = decimal.toString(16).toUpperCase();
+                const calculation = `${display}₁₀ = ${hex}₁₆`;
+                display = hex;
+                updateDisplay();
+                addToHistory(calculation);
+            } catch (error) {
+                showAlert('خطأ في التحويل', 'error');
+            }
+        }
+
+        function convertToBinary() {
+            try {
+                const decimal = parseInt(display);
+                const binary = decimal.toString(2);
+                const calculation = `${display}₁₀ = ${binary}₂`;
+                display = binary;
+                updateDisplay();
+                addToHistory(calculation);
+            } catch (error) {
+                showAlert('خطأ في التحويل', 'error');
+            }
+        }
+
+        function convertToOctal() {
+            try {
+                const decimal = parseInt(display);
+                const octal = decimal.toString(8);
+                const calculation = `${display}₁₀ = ${octal}₈`;
+                display = octal;
+                updateDisplay();
+                addToHistory(calculation);
+            } catch (error) {
+                showAlert('خطأ في التحويل', 'error');
+            }
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(display).then(() => {
+                showAlert('تم النسخ ✓', 'success');
+            });
+        }
+
+        // ==================== العمليات العلمية ====================
+
+        function calculateScientific() {
+            try {
+                const input = document.getElementById('scientific-input').value || display;
+                
+                // استبدال الدوال
+                let expression = input
+                    .replace(/sin\(/g, 'Math.sin(')
+                    .replace(/cos\(/g, 'Math.cos(')
+                    .replace(/tan\(/g, 'Math.tan(')
+                    .replace(/sqrt\(/g, 'Math.sqrt(')
+                    .replace(/log\(/g, 'Math.log10(')
+                    .replace(/ln\(/g, 'Math.log(')
+                    .replace(/exp\(/g, 'Math.exp(')
+                    .replace(/\^/g, '**');
+
+                const result = eval(expression);
+                document.getElementById('scientific-output').textContent = result.toFixed(6);
+                
+                const calculation = `${input} = ${result}`;
+                addToHistory(calculation);
+                
+            } catch (error) {
+                showAlert('خطأ في الحساب', 'error');
+            }
+        }
+
+        // ==================== المصفوفات ====================
+
+        function updateMatrixGrid() {
+            matrixRows = parseInt(document.getElementById('matrix-rows').value) || 2;
+            matrixCols = parseInt(document.getElementById('matrix-cols').value) || 2;
+            
+            const grid = document.getElementById('matrix-grid');
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = `repeat(${matrixCols}, 1fr)`;
+            
+            for (let i = 0; i < matrixRows; i++) {
+                for (let j = 0; j < matrixCols; j++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'matrix-input-field';
+                    input.id = `matrix-cell-${i}-${j}`;
+                    input.placeholder = '0';
+                    input.value = '0';
+                    grid.appendChild(input);
+                }
+            }
+        }
+
+        function setMatrixSize(r, c) {
+            document.getElementById('matrix-rows').value = r;
+            document.getElementById('matrix-cols').value = c;
+            
+            document.querySelectorAll('.matrix-preset-btns .preset-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            updateMatrixGrid();
+        }
+
+        function getMatrixFromGrid() {
+            const matrix = [];
+            for (let i = 0; i < matrixRows; i++) {
+                const row = [];
+                for (let j = 0; j < matrixCols; j++) {
+                    const value = parseFloat(document.getElementById(`matrix-cell-${i}-${j}`).value) || 0;
+                    row.push(value);
+                }
+                matrix.push(row);
+            }
+            currentMatrix = matrix;
+            return matrix;
+        }
+
+        function displayMatrixHTML(matrix) {
+            let html = '<div class="matrix-display">';
+            for (let row of matrix) {
+                html += '<div class="matrix-row">';
+                for (let val of row) {
+                    html += `<div class="matrix-cell">${val.toFixed(4)}</div>`;
+                }
+                html += '</div>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        function matrixDeterminant() {
+            const matrix = getMatrixFromGrid();
+            
+            if (matrix.length !== matrix[0].length) {
+                showAlert('المحدد يحسب للمصفوفات المربعة فقط', 'error');
+                return;
+            }
+
+            try {
+                const det = determinant(matrix);
+                const html = `
+                    <div class="result-item">
+                        <div class="result-title">🔍 المحدد</div>
+                        ${displayMatrixHTML(matrix)}
+                        <div style="margin-top: 1rem; color: #38bdf8; font-weight: 600;">
+                            النتيجة: <strong>${det.toFixed(6)}</strong>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('matrix-results-container').innerHTML = html;
+                addToHistory(`محدد المصفوفة = ${det.toFixed(6)}`);
+            } catch (error) {
+                showAlert('خطأ: ' + error.message, 'error');
+            }
+        }
+
+        function matrixTrace() {
+            const matrix = getMatrixFromGrid();
+            
+            if (matrix.length !== matrix[0].length) {
+                showAlert('الأثر يحسب للمصفوفات المربعة فقط', 'error');
+                return;
+            }
+
+            let trace = 0;
+            for (let i = 0; i < matrix.length; i++) {
+                trace += matrix[i][i];
+            }
+            
+            const html = `
+                <div class="result-item">
+                    <div class="result-title">📍 الأثر (Trace)</div>
+                    ${displayMatrixHTML(matrix)}
+                    <div style="margin-top: 1rem; color: #38bdf8; font-weight: 600;">
+                        النتيجة: <strong>${trace.toFixed(6)}</strong>
+                    </div>
+                </div>
+            `;
+            document.getElementById('matrix-results-container').innerHTML = html;
+            addToHistory(`أثر المصفوفة = ${trace.toFixed(6)}`);
+        }
+
+        function matrixTranspose() {
+            const matrix = getMatrixFromGrid();
+            
+            const transposed = [];
+            for (let j = 0; j < matrix[0].length; j++) {
+                const row = [];
+                for (let i = 0; i < matrix.length; i++) {
+                    row.push(matrix[i][j]);
+                }
+                transposed.push(row);
+            }
+            
+            const html = `
+                <div class="result-item">
+                    <div class="result-title">↔️ المصفوفة المدورة</div>
+                    <p style="color: #cbd5e1; margin-bottom: 0.5rem; font-size: 0.9rem;">الأصلية:</p>
+                    ${displayMatrixHTML(matrix)}
+                    <p style="color: #cbd5e1; margin: 1rem 0 0.5rem 0; font-size: 0.9rem;">المدورة:</p>
+                    ${displayMatrixHTML(transposed)}
+                </div>
+            `;
+            document.getElementById('matrix-results-container').innerHTML = html;
+            addToHistory('تم حساب المصفوفة المدورة');
+        }
+
+        function matrixInverse() {
+            const matrix = getMatrixFromGrid();
+            
+            if (matrix.length !== matrix[0].length) {
+                showAlert('العكس يحسب للمصفوفات المربعة فقط', 'error');
+                return;
+            }
+
+            try {
+                const det = determinant(matrix);
+                if (Math.abs(det) < 1e-10) {
+                    showAlert('المصفوفة غير قابلة للعكس (المحدد = 0)', 'error');
+                    return;
+                }
+
+                const inverse = inverseMatrix(matrix);
+                const html = `
+                    <div class="result-item">
+                        <div class="result-title">🔄 المصفوفة العكسية</div>
+                        <p style="color: #cbd5e1; margin-bottom: 0.5rem; font-size: 0.9rem;">الأصلية:</p>
+                        ${displayMatrixHTML(matrix)}
+                        <p style="color: #cbd5e1; margin: 1rem 0 0.5rem 0; font-size: 0.9rem;">العكسية:</p>
+                        ${displayMatrixHTML(inverse)}
+                    </div>
+                `;
+                document.getElementById('matrix-results-container').innerHTML = html;
+                addToHistory('تم حساب المصفوفة العكسية');
+            } catch (error) {
+                showAlert('خطأ: ' + error.message, 'error');
+            }
+        }
+
+        function matrixRank() {
+            const matrix = getMatrixFromGrid();
+            
+            try {
+                const rank = calculateRank(matrix);
+                const html = `
+                    <div class="result-item">
+                        <div class="result-title">📊 رتبة المصفوفة</div>
+                        ${displayMatrixHTML(matrix)}
+                        <div style="margin-top: 1rem; color: #38bdf8; font-weight: 600;">
+                            الرتبة: <strong>${rank}</strong>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('matrix-results-container').innerHTML = html;
+                addToHistory(`رتبة المصفوفة = ${rank}`);
+            } catch (error) {
+                showAlert('خطأ: ' + error.message, 'error');
+            }
+        }
+
+        function matrixRowEchelon() {
+            const matrix = getMatrixFromGrid();
+            
+            try {
+                const reduced = rowEchelonForm([...matrix.map(r => [...r])]);
+                const html = `
+                    <div class="result-item">
+                        <div class="result-title">⬇️ الشكل المختزل</div>
+                        <p style="color: #cbd5e1; margin-bottom: 0.5rem; font-size: 0.9rem;">الأصلية:</p>
+                        ${displayMatrixHTML(matrix)}
+                        <p style="color: #cbd5e1; margin: 1rem 0 0.5rem 0; font-size: 0.9rem;">المختزلة:</p>
+                        ${displayMatrixHTML(reduced)}
+                    </div>
+                `;
+                document.getElementById('matrix-results-container').innerHTML = html;
+                addToHistory('تم حساب الشكل المختزل للمصفوفة');
+            } catch (error) {
+                showAlert('خطأ: ' + error.message, 'error');
+            }
+        }
+
+        // ==================== الدوال الرياضية للمصفوفات ====================
+
+        function determinant(matrix) {
+            const n = matrix.length;
+            
+            if (n === 1) return matrix[0][0];
+            if (n === 2) return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+            
+            let det = 0;
+            for (let j = 0; j < n; j++) {
+                det += Math.pow(-1, j) * matrix[0][j] * determinant(getMinor(matrix, 0, j));
+            }
+            return det;
+        }
+
+        function getMinor(matrix, row, col) {
+            return matrix
+                .filter((r, i) => i !== row)
+                .map(r => r.filter((c, j) => j !== col));
+        }
+
+        function inverseMatrix(matrix) {
+            const n = matrix.length;
+            const det = determinant(matrix);
+            
+            if (Math.abs(det) < 1e-10) throw new Error('المصفوفة غير قابلة للعكس');
+            
+            if (n === 2) {
+                return [
+                    [matrix[1][1] / det, -matrix[0][1] / det],
+                    [-matrix[1][0] / det, matrix[0][0] / det]
+                ];
+            }
+            
+            const augmented = matrix.map((row, i) => [
+                ...row,
+                ...Array(n).fill(0).map((_, j) => i === j ? 1 : 0)
+            ]);
+            
+            for (let i = 0; i < n; i++) {
+                let maxRow = i;
+                for (let k = i + 1; k < n; k++) {
+                    if (Math.abs(augmented[k][i]) > Math.abs(augmented[maxRow][i])) {
+                        maxRow = k;
+                    }
+                }
+                [augmented[i], augmented[maxRow]] = [augmented[maxRow], augmented[i]];
+                
+                const pivot = augmented[i][i];
+                for (let j = 0; j < 2 * n; j++) {
+                    augmented[i][j] /= pivot;
+                }
+                
+                for (let k = 0; k < n; k++) {
+                    if (k !== i) {
+                        const factor = augmented[k][i];
+                        for (let j = 0; j < 2 * n; j++) {
+                            augmented[k][j] -= factor * augmented[i][j];
+                        }
+                    }
+                }
+            }
+            
+            return augmented.map(row => row.slice(n));
+        }
+
+        function calculateRank(matrix) {
+            const m = [...matrix.map(r => [...r])];
+            let rank = 0;
+            
+            for (let col = 0; col < m[0].length && rank < m.length; col++) {
+                let pivotRow = -1;
+                for (let row = rank; row < m.length; row++) {
+                    if (Math.abs(m[row][col]) > 1e-10) {
+                        if (pivotRow === -1 || Math.abs(m[row][col]) > Math.abs(m[pivotRow][col])) {
+                            pivotRow = row;
+                        }
+                    }
+                }
+                
+                if (pivotRow === -1) continue;
+                
+                [m[rank], m[pivotRow]] = [m[pivotRow], m[rank]];
+                
+                for (let row = rank + 1; row < m.length; row++) {
+                    const factor = m[row][col] / m[rank][col];
+                    for (let j = col; j < m[0].length; j++) {
+                        m[row][j] -= factor * m[rank][j];
+                    }
+                }
+                rank++;
+            }
+            
+            return rank;
+        }
+
+        function rowEchelonForm(matrix) {
+            const m = [...matrix];
+            let currentRow = 0;
+            
+            for (let col = 0; col < m[0].length && currentRow < m.length; col++) {
+                let pivotRow = -1;
+                for (let row = currentRow; row < m.length; row++) {
+                    if (Math.abs(m[row][col]) > 1e-10) {
+                        pivotRow = row;
+                        break;
+                    }
+                }
+                
+                if (pivotRow === -1) continue;
+                
+                [m[currentRow], m[pivotRow]] = [m[pivotRow], m[currentRow]];
+                
+                for (let row = currentRow + 1; row < m.length; row++) {
+                    if (Math.abs(m[currentRow][col]) > 1e-10) {
+                        const factor = m[row][col] / m[currentRow][col];
+                        for (let j = 0; j < m[0].length; j++) {
+                            m[row][j] -= factor * m[currentRow][j];
+                        }
+                    }
+                }
+                currentRow++;
+            }
+            
+            return m.map(row =>
+                row.map(val => Math.abs(val) < 1e-10 ? 0 : parseFloat(val.toFixed(6)))
+            );
+        }
+
+        // ==================== السجل ====================
+
+        function addToHistory(calculation) {
+            const time = new Date().toLocaleTimeString('ar-SA');
+            history.unshift({ calculation, time });
+            
+            if (history.length > 50) {
+                history.pop();
+            }
+            
+            localStorage.setItem('calculatorHistory', JSON.stringify(history));
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const container = document.getElementById('history-container');
+            
+            if (history.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; text-align: center;">لا توجد عمليات بعد</p>';
+                return;
+            }
+            
+            container.innerHTML = history.map((item, index) => `
+                <div class="history-item" onclick="restoreCalculation('${item.calculation}')">
+                    <div class="history-item-text">${item.calculation}</div>
+                    <div class="history-item-time">${item.time}</div>
+                </div>
+            `).join('');
+        }
+
+        function restoreCalculation(calculation) {
+            const parts = calculation.split(' = ');
+            if (parts.length === 2) {
+                display = parts[1];
+                updateDisplay();
+            }
+        }
+
+        function clearHistory() {
+            if (confirm('هل أنت متأكد من مسح السجل؟')) {
+                history = [];
+                localStorage.removeItem('calculatorHistory');
+                updateHistoryDisplay();
+                showAlert('تم مسح السجل', 'success');
+            }
+        }
+
+        // ==================== التنبيهات ====================
+
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${type}`;
+            alertDiv.innerHTML = `<span>${message}</span>`;
+            
+            // إضافة التنبيه في أعلى الصفحة
+            document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.header').nextSibling);
+            
+            if (type !== 'error') {
+                setTimeout(() => alertDiv.remove(), 3000);
+            }
+        }
+
+        // ==================== تبديل المظهر ====================
+
+        function toggleTheme() {
+            document.body.style.filter = document.body.style.filter === 'invert(1)' ? 'none' : 'invert(1)';
+        }
+
+    </script>
+</body>
+</html>
